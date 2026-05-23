@@ -16,7 +16,7 @@ passlib[bcrypt]==1.7.4
 python-jose[cryptography]==3.3.0
 
 # HTTP & Web
-requests==2.31.0
+requests==2.34.2
 httpx==0.25.2
 aiofiles==23.2.1
 python-multipart==0.0.6
