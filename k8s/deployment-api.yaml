@@ -1,0 +1,124 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: eva02-api
+  namespace: eva02
+  labels:
+    app: eva02-api
+    version: "1.0"
+spec:
+  replicas: 3  # Cambiar según necesidad
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  selector:
+    matchLabels:
+      app: eva02-api
+  template:
+    metadata:
+      labels:
+        app: eva02-api
+        version: "1.0"
+    spec:
+      serviceAccountName: eva02-sa
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        fsGroup: 1000
+      containers:
+      - name: api
+        image: eva02-api:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8000
+          name: http
+          protocol: TCP
+        env:
+        - name: SQLALCHEMY_DATABASE_URI
+          value: "postgresql://postgres:$(DB_PASSWORD)@postgres-db:5432/eva02_db"
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: eva02-secrets
+              key: DB_PASSWORD
+        - name: SECRET_KEY
+          valueFrom:
+            secretKeyRef:
+              name: eva02-secrets
+              key: SECRET_KEY
+        - name: API_V1_STR
+          valueFrom:
+            configMapKeyRef:
+              name: eva02-config
+              key: API_V1_STR
+        - name: PROJECT_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: eva02-config
+              key: PROJECT_NAME
+        - name: DEBUG
+          valueFrom:
+            configMapKeyRef:
+              name: eva02-config
+              key: DEBUG
+        - name: LOG_LEVEL
+          valueFrom:
+            configMapKeyRef:
+              name: eva02-config
+              key: LOG_LEVEL
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: false
+          runAsNonRoot: true
+          capabilities:
+            drop:
+            - ALL
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+        livenessProbe:
+          httpGet:
+            path: /api/v1/openapi.json
+            port: 8000
+            scheme: HTTP
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /api/v1/openapi.json
+            port: 8000
+            scheme: HTTP
+          initialDelaySeconds: 10
+          periodSeconds: 5
+          timeoutSeconds: 5
+          failureThreshold: 2
+        volumeMounts:
+        - name: logs
+          mountPath: /app/logs
+        lifecycle:
+          preStop:
+            exec:
+              command: ["/bin/sh", "-c", "sleep 15"]
+      volumes:
+      - name: logs
+        emptyDir: {}
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                  - eva02-api
+              topologyKey: kubernetes.io/hostname

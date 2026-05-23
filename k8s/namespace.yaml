@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: eva02
+  labels:
+    name: eva02
+    version: "1.0"

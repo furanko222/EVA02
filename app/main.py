@@ -7,7 +7,21 @@ from core import config
 from db.session import Session
 
 
-app = FastAPI(__name__, title=config.PROJECT_NAME, openapi_url="/api/v1/openapi.json")
+app = FastAPI(
+    title=config.PROJECT_NAME, 
+    openapi_url="/api/v1/openapi.json",
+    version="1.0.0",
+    description="Microservicio de autenticación y gestión de usuarios"
+)
+
+# Configurar CORS
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # En producción, usar lista específica
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 app.include_router(api_router, prefix=config.API_V1_STR)

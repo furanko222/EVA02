@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: eva02-config
+  namespace: eva02
+data:
+  API_V1_STR: "/api/v1"
+  PROJECT_NAME: "EVA02"
+  ACCESS_TOKEN_EXPIRE_MINUTES: "30"
+  ALGORITHM: "HS256"
+  DEBUG: "false"
+  LOG_LEVEL: "INFO"
+  DATABASE_HOST: "postgres-db"
+  DATABASE_PORT: "5432"
+  DATABASE_NAME: "eva02_db"
+  DATABASE_USER: "postgres"

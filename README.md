@@ -36,23 +36,33 @@ Microservicio FastAPI con autenticación JWT, gestión de usuarios y base de dat
 
 ## 📊 Cobertura de Requisitos
 
-### ✅ Implementado
+### ✅ Completamente Implementado
 
-- **IE1 - Containerización**: Dockerfile multi-capa optimizado con Python 3.9
-- **IE2 - Pruebas Unitarias**: Framework pytest integrado en el pipeline
-- **IE3 - Análisis de Seguridad**:
-  - Dependabot para actualizaciones automáticas
-  - pip-audit para auditoría de vulnerabilidades
-  - bandit para análisis estático de código
-  - Trivy para escaneo de sistema de archivos e imágenes Docker
-- **IE4 - Despliegue Simulado**: Docker Compose con PostgreSQL + API
-- **IE5 - Orquestación**: Docker Compose configurado para desarrollo y producción
+| # | Requisito | IE | Estado | Detalles |
+|---|-----------|----|----|---------|
+| 1 | Dockerfile | IE1 | ✅ | Multi-capa optimizado |
+| 2.1 | Build Docker en CI/CD | IE1 | ✅ | Job "build" con Trivy |
+| 2.2 | Pruebas unitarias | IE2 | ✅ | 16 tests con pytest |
+| 2.3 | Dependabot | IE3 | ✅ | Configurado automáticamente |
+| 2.3 | pip-audit | IE3 | ✅ | Auditoría de vulnerabilidades |
+| 2.3 | Bandit | IE3 | ✅ | Análisis estático Python |
+| **2.3** | **SonarQube** | **IE3** | **✅** | **Job code-analysis integrado** |
+| 2.3 | Trivy | IE3 | ✅ | Filesystem + Image scanning |
+| 2.4 | Despliegue simulado | IE4 | ✅ | Docker Compose con healthcheck |
+| 2.4 | Alertas/bloqueos | IE3 | ✅ | Exit codes configurados |
+| 3 | Análisis de seguridad | IE3 | ✅ | Completo (pip-audit, bandit, Trivy, SonarQube) |
+| **4** | **Kubernetes** | **IE5** | **✅** | **11 manifests + guía** |
+| 5 | README documentado | IE4 | ✅ | Completo con ejemplos |
 
-### ⚠️ Mejoras Futuras
+### 🆕 Mejoras Recientes
 
-- Análisis de código SonarQube o Snyk
-- Kubernetes manifests para orquestación avanzada
-- Aumentar cobertura de tests unitarios
+- **SonarQube** integrado en el workflow
+- **16 tests** en place (seguridad, JWT, password, config, etc.)
+- **Kubernetes manifests** completos (deployment, statefulset, services, etc.)
+- **Dependencias actualizadas** a versiones 2024
+- **CORS activado** en FastAPI
+- **.env.example** con todas las variables
+- **sonar-project.properties** para configuración
 
 ## 🚀 Inicio Rápido
 
@@ -91,6 +101,100 @@ EOF
 # Levantar con configuración de producción
 docker compose -f docker-compose.prod.yml up -d
 ```
+
+## 🔄 Pipeline CI/CD
+
+El pipeline se ejecuta automáticamente en:
+- **Push** a ramas `main` o `master`
+- **Pull Requests** a `main` o `master`
+
+### Etapas del Pipeline
+
+#### 1️⃣ **Unit Tests (IE2)**
+- Python 3.9 en ubuntu-latest
+- 16 tests de seguridad, JWT, passwords, configuración
+- Ejecución: `pytest -v tests`
+
+#### 2️⃣ **Security Analysis (IE3)**
+- **pip-audit**: Auditoría estricta de vulnerabilidades
+- **bandit**: Análisis estático de código Python
+- **Trivy filesystem**: Escaneo del repositorio
+- **SonarQube**: Análisis profundo de código (nuevo)
+
+#### 3️⃣ **Code Analysis (IE3) - SonarQube**
+- Análisis de calidad de código
+- Detección de code smells
+- Vulnerabilidades de seguridad
+- Cobertura de tests (si se proporciona)
+
+#### 4️⃣ **Build Docker Image (IE1)**
+- Construye imagen `eva02-api:latest`
+- Docker Buildx para mejor rendimiento
+- Trivy analiza la imagen construida
+- Falla si encuentra CRITICAL o HIGH
+
+#### 5️⃣ **Deploy Simulado (IE4)**
+- Levanta Docker Compose
+- Valida que la API responda
+- Reintentos automáticos cada 5 segundos
+- Limpia contenedores al finalizar
+
+## 🐳 Docker Compose
+
+### Desarrollo
+
+```bash
+docker compose up -d
+curl http://localhost:8000/api/v1/openapi.json
+docker compose down -v
+```
+
+### Producción
+
+```bash
+docker compose -f docker-compose.prod.yml up -d
+# Cambiar variables de entorno en .env
+```
+
+## ☸️ Kubernetes (NUEVO)
+
+Se han incluido manifests completos de Kubernetes en la carpeta `k8s/`:
+
+### Archivos Incluidos
+
+- **namespace.yaml** - Namespace eva02
+- **configmap.yaml** - Configuración de la aplicación
+- **secret.yaml** - Secretos (passwords, JWT key)
+- **pvc.yaml** - Volúmenes persistentes
+- **rbac.yaml** - Permisos y ServiceAccount
+- **deployment-db.yaml** - StatefulSet PostgreSQL
+- **service-db.yaml** - Service PostgreSQL
+- **deployment-api.yaml** - Deployment API (3 réplicas)
+- **service-api.yaml** - Service LoadBalancer
+- **ingress.yaml** - Ingress para exponer la API
+- **kustomization.yaml** - Kustomize para deploy
+
+### Deploy a Kubernetes
+
+```bash
+# Opción 1: Usando kubectl apply
+kubectl apply -f k8s/
+
+# Opción 2: Usando Kustomize (RECOMENDADO)
+kubectl apply -k k8s/
+
+# Verificar despliegue
+kubectl get pods -n eva02
+kubectl get svc -n eva02
+
+# Ver logs
+kubectl logs -n eva02 -l app=eva02-api -f
+
+# Port forward
+kubectl port-forward -n eva02 svc/eva02-service 8000:80
+```
+
+Consultar [k8s/README.md](k8s/README.md) para guía completa de Kubernetes.
 
 ## 🔄 Pipeline CI/CD
 

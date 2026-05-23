@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: postgres-pvc
+  namespace: eva02
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: standard  # Cambiar según el proveedor K8s
+  resources:
+    requests:
+      storage: 10Gi  # Aumentar en producción
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: app-logs-pvc
+  namespace: eva02
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: standard
+  resources:
+    requests:
+      storage: 5Gi
