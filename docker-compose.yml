@@ -15,15 +15,15 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
-    
-    app: 
-      build: .
-      ports:
-        - "8000:8000"
-      environment: 
-        SQLALCHEMY_DATABASE_URI: postgresql://postgres:pass@db:5432/test_db
-        SECRET_KEY: development
-      depends_on:
-        db: 
-          condition: service_healthy
+
+  app: 
+    build: .
+    ports:
+      - "8000:8000"
+    environment: 
+      SQLALCHEMY_DATABASE_URI: postgresql://postgres:pass@db:5432/test_db
+      SECRET_KEY: development
+    depends_on:
+      db: 
+        condition: service_healthy
           
