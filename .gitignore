@@ -2,8 +2,10 @@ venv/
 .vscode/
 __pycache__/
 data/
-.git/
-.github/
-tests/
-*.md
-
+*.pyc
+.coverage
+coverage.xml
+htmlcov/
+test_ci.db
+bandit-report.json
+.env
