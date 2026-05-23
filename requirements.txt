@@ -1,12 +1,12 @@
-# Core dependencies
-fastapi==0.104.1
-uvicorn[standard]==0.27.0
-starlette==0.27.0
-pydantic==2.5.0
-pydantic-settings==2.1.0
+# Core dependencies - Versiones modernas pero estables
+fastapi==0.95.2
+uvicorn[standard]==0.21.0
+starlette==0.26.0
+pydantic==1.10.12
+pydantic-settings==2.0.3
 
 # Database
-SQLAlchemy==2.0.23
+SQLAlchemy==1.4.48
 psycopg2-binary==2.9.9
 alembic==1.13.1
 
