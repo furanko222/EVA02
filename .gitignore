@@ -2,3 +2,8 @@ venv/
 .vscode/
 __pycache__/
 data/
+.git/
+.github/
+tests/
+*.md
+
