@@ -1,4 +1,4 @@
-from starlette.testclient import testclient 
+from starlette.testclient import TestClient 
 
 from main import app
 
