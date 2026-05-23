@@ -337,9 +337,14 @@ Verificar que PYTHONPATH esté configurado correctamente en el workflow.
 - [GitHub Actions](https://docs.github.com/en/actions)
 - [Docker Compose](https://docs.docker.com/compose/)
 - [Trivy](https://github.com/aquasecurity/trivy)
+- [Uso de IA - Bibliotecas Duoc UC](https://bibliotecas.duoc.cl/ia)
+
+## Declaración de uso de IA
+
+Se utilizó Cursor como apoyo para depuración de código, configuración DevOps (Docker, Kubernetes, GitHub Actions) y revisión de redacción en borradores no evaluativos. Se validó todo el material asistido por IA. Conclusiones, justificaciones técnicas y reflexiones individuales se redactaron sin IA. 
 
 ---
 
-**Mantenedor**: Tu nombre aquí  
-**Última actualización**: 2026-05-23  
-**Estado**: ✅ Production Ready (con mejoras pendientes)
+**Mantenedor**: Franco Pisani 
+**Última actualización**: 23-05-2026
+**Estado**: Se cumple con lo pedido, pero hay mejoras pendientes
