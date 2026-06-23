@@ -4,7 +4,7 @@
 
 ```
 Usuario: fr.pisani@duocuc.cl
-Contraseña: P19186594-4
+Contraseña: Hola112243@
 ```
 
 ## 📍 Conexión a Instancia EC2
