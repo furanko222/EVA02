@@ -1,14 +1,14 @@
 from typing import Optional
 
-from pydantic import BaseModel, Schema, EmailStr
+from pydantic import BaseModel, Field, EmailStr
 
 
 # Shared properties
 class UserBase(BaseModel):
-    email: Optional[EmailStr] = Schema(None, description="Unique email of the user")
-    is_active: Optional[bool] = Schema(True, description="")
-    is_superuser: Optional[bool] = Schema(False, description="Gives user control over other users")
-    full_name: Optional[str] = Schema(None, title="Full Name", examples="John Doe")
+    email: Optional[EmailStr] = Field(None, description="Unique email of the user")
+    is_active: Optional[bool] = Field(True, description="")
+    is_superuser: Optional[bool] = Field(False, description="Gives user control over other users")
+    full_name: Optional[str] = Field(None, title="Full Name", examples=["John Doe"])
 
 
 class UserBaseInDB(UserBase):
