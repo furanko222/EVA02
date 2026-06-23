@@ -108,7 +108,7 @@ jobs:
 
       - name: SonarCloud (opcional si hay SONAR_TOKEN)
         uses: SonarSource/sonarcloud-github-action@master
-        continue-on-error: true
+        continue-on-error: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}

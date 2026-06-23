@@ -39,7 +39,7 @@ services:
     networks:
       - eva02-net
 
-prometheus:
+  prometheus:
     image: prom/prometheus:latest
     ports:
       - "9090:9090"
@@ -61,8 +61,11 @@ prometheus:
     environment:
       GF_SECURITY_ADMIN_PASSWORD: admin
       GF_USERS_ALLOW_SIGN_UP: "false"
+      GF_PATHS_PROVISIONING: /etc/grafana/provisioning
     volumes:
       - grafana_data:/var/lib/grafana
+      - ./monitoring/grafana/provisioning/datasources:/etc/grafana/provisioning/datasources
+      - ./monitoring/grafana/provisioning/dashboards:/etc/grafana/provisioning/dashboards
     networks:
       - eva02-net
     depends_on:

@@ -1,5 +1,6 @@
 from fastapi import FastAPI, Response
-from prometheus_client import Counter, Histogram, Gauge, generate_latest, CONTENT_TYPE_LATEST import time
+from prometheus_client import Counter, Histogram, Gauge, generate_latest, CONTENT_TYPE_LATEST
+import time
 from starlette.middleware.cors import CORSMiddleware
 from starlette.requests import Request
 
