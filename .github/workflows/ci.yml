@@ -62,6 +62,7 @@ jobs:
 
       - name: SCA - pip-audit (dependencias)
         run: pip-audit -r requirements.txt --desc
+        continue-on-error: false
 
       - name: SAST - Bandit (código estático)
         run: |
